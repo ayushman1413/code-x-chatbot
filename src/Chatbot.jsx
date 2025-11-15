@@ -7,12 +7,11 @@ import './Chatbot.css';
 const Chatbot = () => {
   // Chatbot ki state manage kar rahe hain
   const [isOpen, setIsOpen] = useState(false); // Chat window open/close
-  const [messages, setMessages] = useState([
-    { text: "Hello! I'm CODEx, your coding assistant. How can I help you with programming today?", sender: 'bot' }
-  ]); // Messages array
+  const [messages, setMessages] = useState([]); // Messages array - localStorage se load karenge
   const [inputMessage, setInputMessage] = useState(''); // User input
   const [isTyping, setIsTyping] = useState(false); // Typing indicator
   const [copiedCode, setCopiedCode] = useState(''); // Copy status track karne ke liye
+  const [userName, setUserName] = useState(''); // User ka naam store karne ke liye
   const messagesEndRef = useRef(null); // Scroll reference
 
   // Messages ke bottom tak scroll karne ke liye
@@ -24,6 +23,37 @@ const Chatbot = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Component mount hone par localStorage se data load karo
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatbot-messages');
+    const savedUserName = localStorage.getItem('chatbot-user-name');
+
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    } else {
+      // Default welcome message
+      const welcomeMessage = { text: "Hello! I'm CODEx, your coding assistant. How can I help you with programming today?", sender: 'bot' };
+      setMessages([welcomeMessage]);
+    }
+
+    if (savedUserName) {
+      setUserName(savedUserName);
+    }
+  }, []);
+
+  // Messages ya userName change hone par localStorage update karo
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem('chatbot-messages', JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (userName) {
+      localStorage.setItem('chatbot-user-name', userName);
+    }
+  }, [userName]);
 
   // Chat window toggle karne ke liye
   const toggleChat = () => {
@@ -46,6 +76,24 @@ const Chatbot = () => {
   const handleSendMessage = async () => {
     // Empty message check
     if (inputMessage.trim() === '') return;
+
+    // Check karo ki user ne apna naam bataya hai ya nahi
+    const lowerInput = inputMessage.toLowerCase();
+    if (!userName && (lowerInput.includes('my name is') || lowerInput.includes('i am') || lowerInput.includes('i\'m'))) {
+      // Name extract karo
+      let extractedName = '';
+      if (lowerInput.includes('my name is')) {
+        extractedName = inputMessage.split('my name is')[1].trim();
+      } else if (lowerInput.includes('i am')) {
+        extractedName = inputMessage.split('i am')[1].trim();
+      } else if (lowerInput.includes('i\'m')) {
+        extractedName = inputMessage.split('i\'m')[1].trim();
+      }
+
+      if (extractedName) {
+        setUserName(extractedName);
+      }
+    }
 
     // User message add karo
     const userMessage = { text: inputMessage, sender: 'user' };
@@ -82,6 +130,7 @@ Your purpose:
 - Help users with programming, debugging, errors, algorithms, and computer science concepts.
 - Allow natural conversation (e.g., greetings, introductions like "my name is Mohan") but always guide the discussion back toward coding topics.
 - Be friendly, clear, and concise in your explanations.
+- Address users by their name if they have introduced themselves.
 
 When explaining:
 - Always give correct code and explain it in easy, beginner-friendly language.
@@ -105,7 +154,9 @@ Behavior rules:
 - Politely redirect unrelated or off-topic questions toward coding.
 - Never generate offensive or irrelevant content.
 - Maintain a professional, helpful tone at all times.
+- If the user has introduced themselves, address them by their name in responses.
 
+${userName ? `User's name: ${userName}` : ''}
 User message: ${inputMessage}`
             }]
           }]
@@ -161,7 +212,7 @@ User message: ${inputMessage}`
         <div className="chatbot-window">
           {/* Header section */}
           <div className="chatbot-header">
-            <h3>CODEx Assistant</h3>
+            <h3>CODEx Assistant {userName && `- ${userName}`}</h3>
             <button className="close-btn" onClick={toggleChat}>×</button>
           </div>
 
