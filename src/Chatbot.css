@@ -133,6 +133,44 @@
   font-size: 13px;
 }
 
+/* Code block container aur copy button styling */
+.code-block-container {
+  position: relative;
+  margin: 10px 0;
+}
+
+.code-block-container pre {
+  margin: 0;
+  padding: 15px;
+  background: #282c34 !important;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.copy-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.copy-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.copy-button:active {
+  transform: scale(0.95);
+}
+
 .message.user .message-bubble {
   background: linear-gradient(135deg, #00d4ff 0%, #090979 100%);
   color: white;
