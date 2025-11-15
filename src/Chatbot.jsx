@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './Chatbot.css';
 
 const Chatbot = () => {
@@ -62,6 +65,7 @@ When explaining:
 - Avoid complex jargon unless you clearly explain it.
 - Keep answers short, direct, and logical.
 - Use examples when it helps understanding.
+- Format code blocks properly using Markdown syntax (e.g., \`\`\`language\ncode\n\`\`\`).
 
 If a user asks about "CODEx":
   Say:
@@ -69,8 +73,8 @@ If a user asks about "CODEx":
 
 If a user asks about the developer or creator of CODEx:
   Say:
-  "CODEx was developed by Kanhaiya Kumar.  
-  Email: kanhaiyakumarmailme@gmail.com  
+  "CODEx was developed by Kanhaiya Kumar.
+  Email: kanhaiyakumarmailme@gmail.com
   GitHub: https://github.com/kumar-kanhaiya"
 
 Behavior rules:
@@ -136,7 +140,29 @@ User message: ${inputMessage}`
             {messages.map((message, index) => (
               <div key={index} className={`message ${message.sender}`}>
                 <div className="message-bubble">
-                  {message.text}
+                  <ReactMarkdown
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '');
+                        return !inline && match ? (
+                          <SyntaxHighlighter
+                            style={oneDark}
+                            language={match[1]}
+                            PreTag="div"
+                            {...props}
+                          >
+                            {String(children).replace(/\n$/, '')}
+                          </SyntaxHighlighter>
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                    }}
+                  >
+                    {message.text}
+                  </ReactMarkdown>
                 </div>
               </div>
             ))}
