@@ -34,3 +34,50 @@
 .social-icon:hover {
   color: #007bff;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer {
+    padding: 1.5rem 0;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .footer-content p {
+    font-size: 0.8rem;
+  }
+
+  .social-icons {
+    gap: 0.8rem;
+  }
+
+  .social-icon {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 1rem 0;
+  }
+
+  .footer-content {
+    padding: 0 1rem;
+  }
+
+  .footer-content p {
+    font-size: 0.7rem;
+  }
+
+  .social-icons {
+    gap: 0.6rem;
+  }
+
+  .social-icon {
+    font-size: 1.2rem;
+  }
+}

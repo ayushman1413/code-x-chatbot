@@ -1,4 +1,4 @@
-.import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './Chatbot.css';
 
 const Chatbot = () => {
@@ -30,11 +30,22 @@ const Chatbot = () => {
     setInputMessage('');
     setIsTyping(true);
 
+    const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
+    if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+      setMessages(prev => [...prev, {
+        text: 'Please set your Gemini API key in the .env file. Get it from Google AI Studio.',
+        sender: 'bot'
+      }]);
+      setIsTyping(false);
+      return;
+    }
+
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-goog-api-key': apiKey,
         },
         body: JSON.stringify({
           contents: [{
@@ -74,13 +85,27 @@ User message: ${inputMessage}`
         })
       });
 
-      const data = await response.json();
-      const botResponse = data.candidates[0].content.parts[0].text;
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+      }
 
-      setMessages(prev => [...prev, { text: botResponse, sender: 'bot' }]);
+      const data = await response.json();
+
+      if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+        const botResponse = data.candidates[0].content.parts[0].text;
+        setMessages(prev => [...prev, { text: botResponse, sender: 'bot' }]);
+      } else {
+        throw new Error('Invalid response format from API');
+      }
     } catch (error) {
       console.error('Error:', error);
-      setMessages(prev => [...prev, { text: 'Sorry, I encountered an error. Please try again.', sender: 'bot' }]);
+      let errorMessage = 'Sorry, I encountered an error. Please try again.';
+      if (error.message.includes('API request failed')) {
+        errorMessage = 'API request failed. Please check your API key and try again.';
+      } else if (error.message.includes('Invalid response format')) {
+        errorMessage = 'Received invalid response from API. Please try again.';
+      }
+      setMessages(prev => [...prev, { text: errorMessage, sender: 'bot' }]);
     } finally {
       setIsTyping(false);
     }

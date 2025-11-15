@@ -43,3 +43,44 @@
 .navbar-menu a:hover {
   color: #007bff;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .navbar-logo h2 {
+    font-size: 1.3rem;
+  }
+
+  .navbar-menu {
+    justify-content: flex-end;
+  }
+
+  .navbar-menu li {
+    margin: 0 0.5rem;
+  }
+
+  .navbar-menu a {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.6rem 1rem;
+  }
+
+  .navbar-logo h2 {
+    font-size: 1.2rem;
+  }
+
+  .navbar-menu li {
+    margin: 0 0.3rem;
+  }
+
+  .navbar-menu a {
+    font-size: 0.8rem;
+  }
+}

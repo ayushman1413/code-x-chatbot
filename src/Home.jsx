@@ -6,7 +6,7 @@ const Home = () => {
     <div className="home">
       <section id="home" className="hero">
         <div className="hero-content">
-          <h1>Welcome to Our Chat-Bot</h1>
+          <h1>Welcome to Our Chatrs-Bot</h1>
           <p>Your journey to success starts here. Discover amazing features and services.</p>
           <button className="cta-button">Get Started</button>
         </div>
