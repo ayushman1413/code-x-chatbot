@@ -19,6 +19,9 @@ const Chatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+
+  
+
   // Messages change hone par auto scroll
   useEffect(() => {
     scrollToBottom();
