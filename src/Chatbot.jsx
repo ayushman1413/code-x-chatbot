@@ -4,7 +4,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './Chatbot.css';
 
-
 const Chatbot = () => {
   // Chatbot ki state manage kar rahe hain
   const [isOpen, setIsOpen] = useState(false); // Chat window open/close
