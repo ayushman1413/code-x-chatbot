@@ -4,6 +4,8 @@
   padding: 2rem 0;
   text-align: center;
 }
+
+
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -12,7 +14,6 @@
   align-items: center;
   padding: 0 2rem;
 }
-
 
 .footer-content p {
   margin: 0;
