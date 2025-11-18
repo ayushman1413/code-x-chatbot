@@ -5,7 +5,6 @@ import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './Chatbot.css';
 
 const Chatbot = () => {
-  // Chatbot ki state manage kar rahe hain
   const [isOpen, setIsOpen] = useState(false); // Chat window open/close
   const [messages, setMessages] = useState([]); // Messages array - localStorage se load karenge
   const [inputMessage, setInputMessage] = useState(''); // User input
