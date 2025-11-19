@@ -57,7 +57,10 @@ const Home = () => {
         </div>
       </section>
 
-
+git init 
+git add .
+git commit -m"update"
+git push
 
       <section id="contact" className="contact">
         <h2>Contact Us</h2>
