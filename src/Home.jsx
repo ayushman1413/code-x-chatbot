@@ -60,6 +60,7 @@ const Home = () => {
 
 
 
+
       <section id="contact" className="contact">
         <h2>Contact Us</h2>
         <p>Get in touch with us for your next project.</p>
